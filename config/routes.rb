@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     },
     skip: [:registrations]
     
-    resources :posts, only: [:index, :show, :create, :update, :destroy]
+    namespace :api do
+      namespace :v1 do
+        resources :posts
+      end
+    end
 
   devise_scope :user do
     post 'users', to: 'users/registrations#create', as: :user_registration
