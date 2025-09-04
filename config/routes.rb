@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     },
     skip: [:registrations]
     
+    namespace :admin do
+      resources :users
+    end
+
     namespace :api do
       namespace :v1 do
         resources :posts do
