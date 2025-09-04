@@ -42,7 +42,7 @@ module Api
       end
 
       def authorize_comment_owner!
-        unless @comment.user_id == current_user.id
+        unless @comment.user_id == current_user.id || current_user.admin?
           render json: { error: "Unauthorized" }, status: :unauthorized
         end
       end
