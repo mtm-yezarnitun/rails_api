@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       registrations: 'users/registrations'
     },
     skip: [:registrations]
+    
+    resources :posts, only: [:index, :show, :create, :update, :destroy]
 
   devise_scope :user do
     post 'users', to: 'users/registrations#create', as: :user_registration
