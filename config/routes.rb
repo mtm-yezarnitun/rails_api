@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users,
     controllers: {
-      sessions: 'users/sessions'
-    }
+      sessions: 'users/sessions',
+      registrations: 'users/registrations'
+    },
+    skip: [:registrations]
+
+  devise_scope :user do
+    post 'users', to: 'users/registrations#create', as: :user_registration
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
