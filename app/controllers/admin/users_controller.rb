@@ -21,6 +21,8 @@ class Admin::UsersController < ApplicationController
     def create
     @user = User.new(user_params)
         if @user.save
+            UserMailer.welcome_email(@user).deliver_later
+
             render json: @user, status: :created
         else
             render json: @user.errors, status: :unprocessable_entity
@@ -45,7 +47,7 @@ class Admin::UsersController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:email, :password, :role)
+        params.require(:user).permit(:email, :password, :password_confirmation, :role)
     end
     
 end

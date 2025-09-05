@@ -7,8 +7,8 @@ module Api
 
       # GET /posts
       def index
-        posts = Post.includes(:user).all
-        render json: PostSerializer.new(posts, include: [:user]).serializable_hash.to_json
+        posts = Post.includes(:user).page(params[:page]).per(params[:per_page] || 10)
+        render json: PostSerializer.new(posts).serializable_hash.to_json
       end
 
       # GET /posts/:id

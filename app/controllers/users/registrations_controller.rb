@@ -9,6 +9,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def respond_with(resource, _opts = {})
     if resource.persisted?
+      
+      UserMailer.welcome_email(resource).deliver_later
+
       token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
       render json: {
         message: 'Signed up successfully.',
