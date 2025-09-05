@@ -9,7 +9,12 @@ module Api
 
       def index
         comments = @post.comments.includes(:user)
-        render json: comments, include: :user
+
+        if comments.any?
+          render json: comments, include: :user
+        else
+          render json: { message: "No comments found for this post." }, status: :ok
+        end
       end
 
       # POST /api/v1/posts/:post_id/comments
@@ -25,11 +30,10 @@ module Api
       # DELETE /api/v1/posts/:post_id/comments/:id
       def destroy
         @comment.destroy
-        head :no_content
+        render json: { message: 'Comment deleted successfully.' },status: :ok
       end
 
       private
-
 
       def set_post
         @post = Post.find_by(id: params[:post_id])

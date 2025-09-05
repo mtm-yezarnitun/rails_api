@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users,
+    path: '',
+    path_names: {
+      sign_in: 'login',
+      sign_out: 'logout',
+      sign_up: 'signup'
+    },
     controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'
@@ -17,10 +23,10 @@ Rails.application.routes.draw do
         end
       end
     end
-
-  devise_scope :user do
-    post 'users', to: 'users/registrations#create', as: :user_registration
-  end
+    
+    devise_scope :user do
+      post 'sign-up', to: 'users/registrations#create', as: :user_registration
+    end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

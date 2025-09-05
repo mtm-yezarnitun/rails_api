@@ -1,6 +1,10 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
+  def new
+    render json: { error: 'GET method not allowed for login. Use POST.' }, status: :method_not_allowed
+  end
+  
   private
 
   def respond_with(resource, _opts = {})

@@ -5,4 +5,6 @@ class Post < ApplicationRecord
   validates :body, presence: true
   
   has_many :comments, dependent: :destroy
+  has_many_attached :images
+  
 end
