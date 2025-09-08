@@ -38,11 +38,6 @@ Devise.setup do |config|
     jwt.expiration_time = 1.day.to_i
   end
 
-
-
-
-
-
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
 
