@@ -7,13 +7,45 @@ module Api
 
       # GET /posts
       def index
-        posts = Post.includes(:user).page(params[:page]).per(params[:per_page] || 10)
-        render json: PostSerializer.new(posts).serializable_hash.to_json
+        posts = Post.page(params[:page]).per(params[:per_page] || 10)
+        render json: posts.as_json(
+          only: [:id, :title, :body, :created_at, :updated_at],
+          methods: [:image_urls],
+          include: {
+            user: {
+              only: [:id, :email, :created_at]
+            },
+          comments: {
+              only: [:id, :body, :created_at],
+              include: {
+                user: {
+                  only: [:id, :email]
+                }
+              }
+            }
+          }
+        )
       end
 
       # GET /posts/:id
       def show
-        render json: PostSerializer.new(@post, include: [:user]).serializable_hash.to_json
+        render json: @post.as_json(
+          only: [:id, :title, :body, :created_at, :updated_at],
+          methods: [:image_urls],
+          include: {
+            user: {
+              only: [:id, :email, :created_at]
+            },
+            comments: {
+              only: [:id, :body, :created_at],
+              include: {
+                user: {
+                  only: [:id, :email]
+                }
+              }
+            }
+          }
+        )
       end
 
       # POST /posts
@@ -33,8 +65,10 @@ module Api
           @post.images.purge
         end
 
-        if @post.update(post_params)
+        if params[:post] && @post.update(post_params)
           render json: @post
+        elsif !params[:post]
+          render json: { message: 'Images removed successfully.' }, status: :ok
         else
           render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
         end
